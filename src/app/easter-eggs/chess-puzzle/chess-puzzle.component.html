@@ -1,0 +1,51 @@
+<div class="chess-puzzle-overlay" (click)="onClose()">
+  <div class="chess-puzzle-modal" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="onClose()">
+      <i class="fas fa-times"></i>
+    </button>
+
+    <h2>Chess Puzzle</h2>
+    <p class="puzzle-prompt">White to move - Mate in 2!</p>
+
+    <div class="chess-board">
+      @for (row of board; track $index) {
+        <div class="board-row">
+          @for (square of row; track square.col) {
+            <div
+              class="square"
+              [class.light]="square.isLight"
+              [class.dark]="!square.isLight"
+              [class.highlighted]="square.isHighlighted"
+            >
+              @if (square.piece) {
+                <span class="piece" [class.white-piece]="square.piece.startsWith('w')">
+                  {{ getPieceSymbol(square.piece) }}
+                </span>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="puzzle-controls">
+      <button class="btn btn-primary" (click)="toggleSolution()">
+        <i class="fas" [class.fa-eye]="!showSolution" [class.fa-eye-slash]="showSolution"></i>
+        {{ showSolution ? 'Hide Solution' : 'Show Solution' }}
+      </button>
+    </div>
+
+    @if (showSolution) {
+      <div class="solution">
+        <h3>Solution:</h3>
+        <ol>
+          @for (step of solution; track $index) {
+            <li>
+              <strong>{{ step.move }}</strong> - {{ step.description }}
+            </li>
+          }
+        </ol>
+      </div>
+    }
+  </div>
+</div>
