@@ -1,0 +1,30 @@
+<section class="hobbies section" id="hobbies">
+  <div class="container">
+    <h2 class="section-title">Hobbies & <span>Interests</span></h2>
+
+    <div class="hobbies-grid">
+      @for (hobby of hobbies; track hobby.id) {
+        <article
+          class="hobby-card"
+          [class.clickable]="hobby.id === 'chess' || hobby.id === 'soccer'"
+          (click)="onHobbyClick(hobby.id)"
+        >
+          <div class="hobby-icon" [style.background]="hobby.color + '20'" [style.color]="hobby.color">
+            <i [class]="hobby.icon"></i>
+          </div>
+          <h3>{{ hobby.title }}</h3>
+          <p>{{ hobby.description }}</p>
+          <div class="fun-fact">
+            <i class="fas fa-lightbulb"></i>
+            <span>{{ hobby.funFact }}</span>
+          </div>
+          @if (hobby.id === 'chess' || hobby.id === 'soccer') {
+            <div class="click-hint">
+              <i class="fas fa-hand-pointer"></i> Click to interact
+            </div>
+          }
+        </article>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,50 @@
+<section class="contact section" id="contact">
+  <div class="container">
+    <h2 class="section-title">Get In <span>Touch</span></h2>
+
+    <div class="contact-content">
+      <div class="contact-info">
+        <h3>Let's Connect</h3>
+        <p>
+          I'm always interested in hearing about new opportunities, collaborations,
+          or just having a chat about technology and ideas. Feel free to reach out!
+        </p>
+
+        <div class="contact-methods">
+          @for (method of contactMethods; track method.title) {
+            <a [href]="method.link" target="_blank" rel="noopener noreferrer" class="contact-method">
+              <div class="method-icon">
+                <i [class]="method.icon"></i>
+              </div>
+              <div class="method-details">
+                <h4>{{ method.title }}</h4>
+                <span>{{ method.value }}</span>
+              </div>
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          }
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <div class="card-content">
+          <div class="card-icon">
+            <i class="fas fa-paper-plane"></i>
+          </div>
+          <h3>Ready to Start a Project?</h3>
+          <p>
+            Whether you have a question or just want to say hi,
+            I'll do my best to get back to you!
+          </p>
+          <a href="mailto:hello@example.com" class="btn btn-orange">
+            <i class="fas fa-envelope"></i> Send an Email
+          </a>
+        </div>
+        <div class="card-decoration">
+          <div class="deco-circle"></div>
+          <div class="deco-circle"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

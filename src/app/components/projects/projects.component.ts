@@ -1,0 +1,68 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  tags: string[];
+  github: string;
+  demo: string;
+  featured: boolean;
+}
+
+@Component({
+  selector: 'app-projects',
+  imports: [CommonModule],
+  templateUrl: './projects.component.html',
+  styleUrl: './projects.component.scss'
+})
+export class ProjectsComponent {
+  projects: Project[] = [
+    {
+      id: 1,
+      title: 'Portfolio Website',
+      description: 'A modern, responsive portfolio website built with Angular featuring smooth animations, interactive easter eggs, and a clean blue/orange color scheme.',
+      image: '',
+      tags: ['Angular', 'TypeScript', 'SCSS'],
+      github: 'https://github.com/AidanMath/personal-website',
+      demo: '',
+      featured: true
+    },
+    {
+      id: 2,
+      title: 'Task Management App',
+      description: 'A full-stack task management application with real-time updates, user authentication, and collaborative features.',
+      image: '',
+      tags: ['Node.js', 'Express', 'MongoDB', 'React'],
+      github: '',
+      demo: '',
+      featured: true
+    },
+    {
+      id: 3,
+      title: 'Chess Engine',
+      description: 'A chess engine implementation featuring move validation, AI opponent with minimax algorithm, and position evaluation.',
+      image: '',
+      tags: ['Python', 'Algorithms', 'AI'],
+      github: '',
+      demo: '',
+      featured: true
+    },
+    {
+      id: 4,
+      title: 'Factorio Calculator',
+      description: 'A production ratio calculator for Factorio that helps optimize factory layouts and resource management.',
+      image: '',
+      tags: ['TypeScript', 'React', 'GraphQL'],
+      github: '',
+      demo: '',
+      featured: false
+    }
+  ];
+
+  get featuredProjects(): Project[] {
+    return this.projects.filter(p => p.featured);
+  }
+}
