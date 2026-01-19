@@ -3,7 +3,21 @@
   <app-hero></app-hero>
   <app-about></app-about>
   <app-projects></app-projects>
-  <app-hobbies></app-hobbies>
+  <app-hobbies
+    (openChessPuzzle)="openChessPuzzle()"
+    (activateSoccerBall)="activateSoccerBall()"
+  ></app-hobbies>
   <app-contact></app-contact>
 </main>
 <app-footer></app-footer>
+
+<!-- Easter Eggs -->
+@if (showChessPuzzle) {
+  <app-chess-puzzle (close)="closeChessPuzzle()"></app-chess-puzzle>
+}
+
+<app-soccer-ball [isActive]="showSoccerBall"></app-soccer-ball>
+
+@if (showKonamiSecret) {
+  <app-konami-secret (close)="closeKonamiSecret()"></app-konami-secret>
+}
