@@ -1,67 +1,69 @@
 <section class="about section" id="about">
   <div class="container">
-    <h2 class="section-title">About <span>Me</span></h2>
+    <div class="glass-section">
+      <h2 class="section-title">About <span>Me</span></h2>
 
-    <div class="about-content">
-      <div class="about-image">
-        <div class="image-wrapper">
-          <div class="placeholder-avatar">
-            <i class="fas fa-user"></i>
+      <div class="about-content">
+        <div class="about-image">
+          <div class="image-wrapper">
+            <div class="placeholder-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="image-border"></div>
           </div>
-          <div class="image-border"></div>
+        </div>
+
+        <div class="about-text">
+          <h3>Software Developer & Problem Solver</h3>
+          <p>
+            I'm a passionate software developer who loves turning complex problems into
+            elegant solutions. With a strong foundation in modern web technologies and
+            a keen eye for detail, I build applications that are both functional and
+            enjoyable to use.
+          </p>
+          <p>
+            When I'm not coding, you'll find me playing chess, watching soccer,
+            or optimizing my Factorio factory layouts. I believe that the same
+            strategic thinking that makes these activities enjoyable also makes
+            for better software architecture.
+          </p>
+
+          <div class="about-highlights">
+            <div class="highlight">
+              <i class="fas fa-graduation-cap"></i>
+              <div>
+                <h4>Education</h4>
+                <p>Computer Science</p>
+              </div>
+            </div>
+            <div class="highlight">
+              <i class="fas fa-briefcase"></i>
+              <div>
+                <h4>Experience</h4>
+                <p>Full-Stack Development</p>
+              </div>
+            </div>
+            <div class="highlight">
+              <i class="fas fa-map-marker-alt"></i>
+              <div>
+                <h4>Location</h4>
+                <p>Available Remote</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="about-text">
-        <h3>Software Developer & Problem Solver</h3>
-        <p>
-          I'm a passionate software developer who loves turning complex problems into
-          elegant solutions. With a strong foundation in modern web technologies and
-          a keen eye for detail, I build applications that are both functional and
-          enjoyable to use.
-        </p>
-        <p>
-          When I'm not coding, you'll find me playing chess, watching soccer,
-          or optimizing my Factorio factory layouts. I believe that the same
-          strategic thinking that makes these activities enjoyable also makes
-          for better software architecture.
-        </p>
-
-        <div class="about-highlights">
-          <div class="highlight">
-            <i class="fas fa-graduation-cap"></i>
-            <div>
-              <h4>Education</h4>
-              <p>Computer Science</p>
+      <div class="skills-section">
+        <h3>Tech Stack</h3>
+        <div class="skills-grid">
+          @for (skill of skills; track skill.name) {
+            <div class="skill-item">
+              <i [class]="skill.icon" [style.color]="skill.color"></i>
+              <span>{{ skill.name }}</span>
             </div>
-          </div>
-          <div class="highlight">
-            <i class="fas fa-briefcase"></i>
-            <div>
-              <h4>Experience</h4>
-              <p>Full-Stack Development</p>
-            </div>
-          </div>
-          <div class="highlight">
-            <i class="fas fa-map-marker-alt"></i>
-            <div>
-              <h4>Location</h4>
-              <p>Available Remote</p>
-            </div>
-          </div>
+          }
         </div>
-      </div>
-    </div>
-
-    <div class="skills-section">
-      <h3>Tech Stack</h3>
-      <div class="skills-grid">
-        @for (skill of skills; track skill.name) {
-          <div class="skill-item">
-            <i [class]="skill.icon" [style.color]="skill.color"></i>
-            <span>{{ skill.name }}</span>
-          </div>
-        }
       </div>
     </div>
   </div>

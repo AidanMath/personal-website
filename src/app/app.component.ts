@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component } from '@angular/core';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { HeroComponent } from './components/hero/hero.component';
 import { AboutComponent } from './components/about/about.component';
@@ -7,10 +6,8 @@ import { ProjectsComponent } from './components/projects/projects.component';
 import { HobbiesComponent } from './components/hobbies/hobbies.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { SandBackgroundComponent } from './components/sand-background/sand-background.component';
 import { ChessPuzzleComponent } from './easter-eggs/chess-puzzle/chess-puzzle.component';
-import { SoccerBallComponent } from './easter-eggs/soccer-ball/soccer-ball.component';
-import { KonamiSecretComponent } from './easter-eggs/konami-secret/konami-secret.component';
-import { KonamiService } from './services/konami.service';
 
 @Component({
   selector: 'app-root',
@@ -22,33 +19,15 @@ import { KonamiService } from './services/konami.service';
     HobbiesComponent,
     ContactComponent,
     FooterComponent,
-    ChessPuzzleComponent,
-    SoccerBallComponent,
-    KonamiSecretComponent
+    SandBackgroundComponent,
+    ChessPuzzleComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent {
   title = 'aidan-portfolio';
-
   showChessPuzzle = false;
-  showSoccerBall = false;
-  showKonamiSecret = false;
-
-  private konamiSubscription?: Subscription;
-
-  constructor(private konamiService: KonamiService) {}
-
-  ngOnInit(): void {
-    this.konamiSubscription = this.konamiService.konamiActivated$.subscribe(() => {
-      this.showKonamiSecret = true;
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.konamiSubscription?.unsubscribe();
-  }
 
   openChessPuzzle(): void {
     this.showChessPuzzle = true;
@@ -56,13 +35,5 @@ export class AppComponent implements OnInit, OnDestroy {
 
   closeChessPuzzle(): void {
     this.showChessPuzzle = false;
-  }
-
-  activateSoccerBall(): void {
-    this.showSoccerBall = !this.showSoccerBall;
-  }
-
-  closeKonamiSecret(): void {
-    this.showKonamiSecret = false;
   }
 }

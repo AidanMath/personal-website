@@ -8,6 +8,7 @@ interface Hobby {
   description: string;
   funFact: string;
   color: string;
+  clickable: boolean;
 }
 
 @Component({
@@ -18,7 +19,6 @@ interface Hobby {
 })
 export class HobbiesComponent {
   @Output() openChessPuzzle = new EventEmitter<void>();
-  @Output() activateSoccerBall = new EventEmitter<void>();
 
   hobbies: Hobby[] = [
     {
@@ -26,16 +26,18 @@ export class HobbiesComponent {
       title: 'Soccer',
       icon: 'fas fa-futbol',
       description: 'Lifelong fan of the beautiful game. Whether playing, watching, or analyzing tactics, soccer is my go-to sport.',
-      funFact: 'Click the ball to unleash some physics!',
-      color: '#22c55e'
+      funFact: 'Favorite team: [Your team here]',
+      color: '#22c55e',
+      clickable: false
     },
     {
       id: 'chess',
       title: 'Chess',
       icon: 'fas fa-chess',
       description: 'Strategy and pattern recognition - chess sharpens the mind. I enjoy studying openings, tactics, and endgames.',
-      funFact: 'Try solving a puzzle below!',
-      color: '#8b5cf6'
+      funFact: 'Click to try a puzzle!',
+      color: '#8b5cf6',
+      clickable: true
     },
     {
       id: 'gaming',
@@ -43,15 +45,14 @@ export class HobbiesComponent {
       icon: 'fas fa-industry',
       description: 'The factory must grow! Optimizing production lines and logistics in Factorio scratches that engineering itch.',
       funFact: 'SPM (Science Per Minute) is the true measure of success.',
-      color: '#f97316'
+      color: '#f97316',
+      clickable: false
     }
   ];
 
   onHobbyClick(hobbyId: string): void {
     if (hobbyId === 'chess') {
       this.openChessPuzzle.emit();
-    } else if (hobbyId === 'soccer') {
-      this.activateSoccerBall.emit();
     }
   }
 }

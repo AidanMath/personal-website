@@ -1,7 +1,7 @@
 .chess-puzzle-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,22 +11,23 @@
 
 .chess-puzzle-modal {
   background: var(--surface);
-  border-radius: 20px;
-  padding: 2rem;
-  max-width: 500px;
+  border-radius: 16px;
+  padding: 1.5rem;
+  max-width: 520px;
   width: 100%;
   position: relative;
   animation: slideIn 0.3s ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-20px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -37,36 +38,130 @@
   background: none;
   border: none;
   color: var(--text-muted);
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: color 0.2s ease, transform 0.2s ease;
+  z-index: 10;
 
   &:hover {
     color: var(--primary-orange);
+    transform: scale(1.1);
   }
 }
 
-h2 {
-  color: var(--text);
+.puzzle-header {
   text-align: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
+
+  h2 {
+    color: var(--text);
+    margin: 0 0 0.25rem;
+    font-size: 1.5rem;
+  }
+
+  .puzzle-prompt {
+    color: var(--accent);
+    font-weight: 600;
+    margin: 0;
+    font-size: 0.95rem;
+  }
 }
 
-.puzzle-prompt {
-  text-align: center;
-  color: var(--accent);
+.message-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background: var(--surface-light);
+  color: var(--text);
+
+  .message-icon {
+    font-size: 1.1rem;
+  }
+
+  &.success {
+    background: linear-gradient(135deg, #4caf50, #45a049);
+    color: white;
+    animation: pulse 0.5s ease;
+  }
+
+  &.wrong {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+    color: white;
+    animation: shake 0.5s ease;
+  }
+
+  &.thinking {
+    background: linear-gradient(135deg, #2196f3, #1976d2);
+    color: white;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+.board-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.board-labels {
+  display: flex;
+  color: var(--text-muted);
+  font-size: 0.75rem;
   font-weight: 600;
-  margin-bottom: 1.5rem;
+
+  &.row-labels {
+    position: absolute;
+    left: 0;
+    top: 0;
+    flex-direction: column;
+    height: 400px;
+    transform: translateX(-1.25rem);
+
+    .label {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  &.col-labels {
+    width: 400px;
+    margin-top: 0.25rem;
+
+    .label {
+      width: 50px;
+      text-align: center;
+    }
+  }
 }
 
 .chess-board {
   display: flex;
   flex-direction: column;
-  border: 3px solid var(--surface-light);
-  border-radius: 8px;
+  border: 3px solid #5d4e37;
+  border-radius: 4px;
   overflow: hidden;
-  margin: 0 auto 1.5rem;
-  max-width: 400px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  user-select: none;
 }
 
 .board-row {
@@ -80,6 +175,8 @@ h2 {
   align-items: center;
   justify-content: center;
   position: relative;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
 
   &.light {
     background: #f0d9b5;
@@ -87,6 +184,33 @@ h2 {
 
   &.dark {
     background: #b58863;
+  }
+
+  &.selected {
+    &.light {
+      background: #f7ec5e;
+    }
+    &.dark {
+      background: #daca34;
+    }
+  }
+
+  &.last-move {
+    &.light {
+      background: #cdd26a;
+    }
+    &.dark {
+      background: #aaa23a;
+    }
+  }
+
+  &.check {
+    background: radial-gradient(ellipse at center,
+      rgba(255, 0, 0, 0.9) 0%,
+      rgba(231, 0, 0, 0.8) 25%,
+      rgba(169, 0, 0, 0.4) 89%,
+      rgba(158, 0, 0, 0) 100%
+    ) !important;
   }
 
   &.highlighted {
@@ -98,51 +222,159 @@ h2 {
       pointer-events: none;
     }
   }
+
+  &:hover {
+    &.light {
+      background: #f7ec9e;
+    }
+    &.dark {
+      background: #daca64;
+    }
+  }
 }
 
 .piece {
-  font-size: 2.5rem;
+  font-size: 2.75rem;
   line-height: 1;
   user-select: none;
-  color: #000;
+  transition: transform 0.15s ease;
+  cursor: grab;
+  z-index: 1;
 
   &.white-piece {
     color: #fff;
-    text-shadow: 0 0 2px #000;
+    text-shadow:
+      0 1px 0 #000,
+      1px 0 0 #000,
+      0 -1px 0 #000,
+      -1px 0 0 #000,
+      0 2px 3px rgba(0, 0, 0, 0.4);
+  }
+
+  &.black-piece {
+    color: #312e2b;
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.square:hover .piece {
+  transform: scale(1.05);
+}
+
+// Legal move indicators (chess.com style)
+.move-dot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 50%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.capture-ring {
+  position: absolute;
+  inset: 2px;
+  border: 5px solid rgba(0, 0, 0, 0.15);
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+// Dragging piece
+.dragging-piece {
+  position: fixed;
+  font-size: 3.5rem;
+  pointer-events: none;
+  z-index: 3000;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+
+  &.white-piece {
+    color: #fff;
+    text-shadow:
+      0 1px 0 #000,
+      1px 0 0 #000,
+      0 -1px 0 #000,
+      -1px 0 0 #000;
+  }
+
+  &.black-piece {
+    color: #312e2b;
   }
 }
 
 .puzzle-controls {
   display: flex;
   justify-content: center;
-  margin-bottom: 1rem;
-}
+  gap: 1rem;
 
-.solution {
-  background: var(--surface-light);
-  border-radius: 12px;
-  padding: 1.5rem;
-  animation: fadeIn 0.3s ease;
+  .btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
 
-  h3 {
-    color: var(--text);
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-  }
+    &.btn-secondary {
+      background: var(--surface-light);
+      color: var(--text);
 
-  ol {
-    margin: 0;
-    padding-left: 1.25rem;
+      &:hover:not(:disabled) {
+        background: var(--surface-lighter, #4a4a4a);
+        transform: translateY(-1px);
+      }
 
-    li {
-      color: var(--text-muted);
-      margin-bottom: 0.75rem;
-      line-height: 1.5;
-
-      strong {
-        color: var(--accent);
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
       }
     }
+
+    &.btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--primary-orange));
+      color: white;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+}
+
+.success-message {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+  z-index: 20;
+
+  .success-icon {
+    font-size: 4rem;
+    color: #ffd700;
+    margin-bottom: 1rem;
+    animation: bounceIn 0.5s ease;
+  }
+
+  h3 {
+    color: #fff;
+    font-size: 1.75rem;
+    margin: 0 0 0.5rem;
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 0 1.5rem;
   }
 }
 
@@ -151,9 +383,47 @@ h2 {
   to { opacity: 1; }
 }
 
+@keyframes bounceIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// Responsive design
 @media (max-width: 480px) {
   .chess-puzzle-modal {
-    padding: 1.5rem;
+    padding: 1rem;
+  }
+
+  .puzzle-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .board-labels {
+    &.row-labels {
+      height: 320px;
+      transform: translateX(-1rem);
+
+      .label {
+        height: 40px;
+      }
+    }
+
+    &.col-labels {
+      width: 320px;
+
+      .label {
+        width: 40px;
+      }
+    }
   }
 
   .square {
@@ -162,6 +432,53 @@ h2 {
   }
 
   .piece {
-    font-size: 2rem;
+    font-size: 2.2rem;
+  }
+
+  .move-dot {
+    width: 12px;
+    height: 12px;
+  }
+
+  .capture-ring {
+    border-width: 4px;
+  }
+
+  .dragging-piece {
+    font-size: 2.8rem;
+  }
+
+  .message-bar {
+    font-size: 0.9rem;
+    padding: 0.6rem 0.8rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .board-labels {
+    &.row-labels {
+      height: 280px;
+
+      .label {
+        height: 35px;
+      }
+    }
+
+    &.col-labels {
+      width: 280px;
+
+      .label {
+        width: 35px;
+      }
+    }
+  }
+
+  .square {
+    width: 35px;
+    height: 35px;
+  }
+
+  .piece {
+    font-size: 1.9rem;
   }
 }

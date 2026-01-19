@@ -4,47 +4,112 @@
       <i class="fas fa-times"></i>
     </button>
 
-    <h2>Chess Puzzle</h2>
-    <p class="puzzle-prompt">White to move - Mate in 2!</p>
-
-    <div class="chess-board">
-      @for (row of board; track $index) {
-        <div class="board-row">
-          @for (square of row; track square.col) {
-            <div
-              class="square"
-              [class.light]="square.isLight"
-              [class.dark]="!square.isLight"
-              [class.highlighted]="square.isHighlighted"
-            >
-              @if (square.piece) {
-                <span class="piece" [class.white-piece]="square.piece.startsWith('w')">
-                  {{ getPieceSymbol(square.piece) }}
-                </span>
-              }
-            </div>
-          }
-        </div>
-      }
+    <div class="puzzle-header">
+      <h2>Chess Puzzle</h2>
+      <p class="puzzle-prompt">White to move - Mate in 2!</p>
     </div>
 
+    <div class="message-bar"
+         [class.success]="puzzleState === 'success'"
+         [class.wrong]="puzzleState === 'wrong'"
+         [class.thinking]="puzzleState === 'computer_moving'">
+      <span class="message-icon">
+        @if (puzzleState === 'success') {
+          <i class="fas fa-check-circle"></i>
+        } @else if (puzzleState === 'wrong') {
+          <i class="fas fa-times-circle"></i>
+        } @else if (puzzleState === 'computer_moving') {
+          <i class="fas fa-spinner fa-spin"></i>
+        } @else {
+          <i class="fas fa-chess"></i>
+        }
+      </span>
+      {{ message }}
+    </div>
+
+    <div class="board-container">
+      <div class="board-labels row-labels">
+        @for (row of [0,1,2,3,4,5,6,7]; track row) {
+          <span class="label">{{ getRowLabel(row) }}</span>
+        }
+      </div>
+
+      <div class="chess-board">
+        @for (row of board; track $index; let rowIdx = $index) {
+          <div class="board-row">
+            @for (square of row; track square.col; let colIdx = $index) {
+              <div
+                class="square"
+                [class.light]="square.isLight"
+                [class.dark]="!square.isLight"
+                [class.highlighted]="square.isHighlighted"
+                [class.selected]="selectedSquare === square"
+                [class.last-move]="square.isLastMove"
+                [class.check]="square.isCheck"
+                [class.legal-move]="square.isLegalMove"
+                [class.legal-capture]="square.isLegalMove && square.piece"
+                (mousedown)="onMouseDown($event, square)"
+                (click)="onSquareClick(square)"
+              >
+                @if (square.piece && !(isDragging && selectedSquare === square)) {
+                  <span
+                    class="piece"
+                    [class.white-piece]="square.piece.startsWith('w')"
+                    [class.black-piece]="square.piece.startsWith('b')"
+                  >
+                    {{ getPieceSymbol(square.piece) }}
+                  </span>
+                }
+
+                @if (square.isLegalMove && !square.piece) {
+                  <span class="move-dot"></span>
+                }
+
+                @if (square.isLegalMove && square.piece) {
+                  <span class="capture-ring"></span>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="board-labels col-labels">
+        @for (col of [0,1,2,3,4,5,6,7]; track col) {
+          <span class="label">{{ getColumnLabel(col) }}</span>
+        }
+      </div>
+    </div>
+
+    @if (isDragging && draggingPiece) {
+      <span
+        class="dragging-piece"
+        [class.white-piece]="draggingPiece.startsWith('w')"
+        [class.black-piece]="draggingPiece.startsWith('b')"
+        [style.left.px]="dragPosition.x"
+        [style.top.px]="dragPosition.y"
+      >
+        {{ getPieceSymbol(draggingPiece) }}
+      </span>
+    }
+
     <div class="puzzle-controls">
-      <button class="btn btn-primary" (click)="toggleSolution()">
-        <i class="fas" [class.fa-eye]="!showSolution" [class.fa-eye-slash]="showSolution"></i>
-        {{ showSolution ? 'Hide Solution' : 'Show Solution' }}
+      <button class="btn btn-secondary" (click)="resetPuzzle()" [disabled]="puzzleState === 'computer_moving'">
+        <i class="fas fa-redo"></i>
+        Reset
       </button>
     </div>
 
-    @if (showSolution) {
-      <div class="solution">
-        <h3>Solution:</h3>
-        <ol>
-          @for (step of solution; track $index) {
-            <li>
-              <strong>{{ step.move }}</strong> - {{ step.description }}
-            </li>
-          }
-        </ol>
+    @if (puzzleState === 'success') {
+      <div class="success-message">
+        <div class="success-icon">
+          <i class="fas fa-trophy"></i>
+        </div>
+        <h3>Puzzle Complete!</h3>
+        <p>You found the checkmate in 2 moves.</p>
+        <button class="btn btn-primary" (click)="resetPuzzle()">
+          Play Again
+        </button>
       </div>
     }
   </div>
