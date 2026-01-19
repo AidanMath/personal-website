@@ -1,0 +1,26 @@
+<nav class="navbar" [class.scrolled]="isScrolled">
+  <div class="navbar-container">
+    <a href="#" class="logo" (click)="scrollToSection($event, '#hero')">
+      <span class="logo-text">Aidan</span>
+    </a>
+
+    <ul class="nav-links" [class.active]="isMobileMenuOpen">
+      @for (item of navItems; track item.label) {
+        <li>
+          <a [href]="item.href" (click)="scrollToSection($event, item.href)">
+            {{ item.label }}
+          </a>
+        </li>
+      }
+    </ul>
+
+    <button class="mobile-toggle" (click)="toggleMobileMenu()" [attr.aria-expanded]="isMobileMenuOpen">
+      <i class="fas" [class.fa-bars]="!isMobileMenuOpen" [class.fa-times]="isMobileMenuOpen"></i>
+    </button>
+  </div>
+  <div class="gradient-line"></div>
+</nav>
+
+@if (isMobileMenuOpen) {
+  <div class="mobile-overlay" (click)="closeMobileMenu()"></div>
+}
