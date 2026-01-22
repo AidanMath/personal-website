@@ -14,16 +14,23 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'aidan-portfolio' title`, () => {
+  it('should have projects array', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('aidan-portfolio');
+    expect(app.projects).toBeDefined();
+    expect(Array.isArray(app.projects)).toBe(true);
+    expect(app.projects.length).toBeGreaterThan(0);
   });
 
-  it('should render title', () => {
+  it('should have valid project structure', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, aidan-portfolio');
+    const app = fixture.componentInstance;
+
+    app.projects.forEach(project => {
+      expect(project.title).toBeDefined();
+      expect(project.description).toBeDefined();
+      expect(project.tags).toBeDefined();
+      expect(Array.isArray(project.tags)).toBe(true);
+    });
   });
 });
