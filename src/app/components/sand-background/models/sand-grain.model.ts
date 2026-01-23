@@ -1,51 +1,55 @@
+export type RGBAColor = [number, number, number, number];
+
 export class SandGrain {
-  col: number;
-  row: number;
-  targetRow: number;
+  x: number;
+  y: number;
   vy: number;
-  color: string;
+  color: RGBAColor;
   settled: boolean;
   delay: number;
   active: boolean;
+  targetY: number;  // Target row for fall-in animation
+  settledFrames: number;  // How many frames this grain has been settled (stability)
 
   constructor(config: {
-    col: number;
-    targetRow: number;
-    color: string;
-    delay: number;
+    x: number;
+    y: number;
+    color: RGBAColor;
+    delay?: number;
+    startY?: number;
+    startVy?: number;
+    settled?: boolean;
   }) {
-    this.col = config.col;
-    this.row = -1;  // Start off-screen
-    this.targetRow = config.targetRow;
-    this.vy = 0;
+    this.x = config.x;
+    this.targetY = config.y;  // Remember target position
+    this.y = config.startY ?? config.y;
+    this.vy = config.startVy ?? 0;
     this.color = config.color;
-    this.settled = false;
-    this.delay = config.delay;
-    this.active = false;
+    this.settled = config.settled ?? false;
+    this.delay = config.delay ?? 0;
+    this.active = this.delay === 0;
+    this.settledFrames = config.settled ? 60 : 0;  // Start stable if pre-settled
   }
 
   activate(): void {
     this.active = true;
-    this.row = 0;
-    this.vy = 2;
   }
 
   settle(): void {
     this.settled = true;
     this.vy = 0;
+    // Don't reset settledFrames - it accumulates
   }
 
   unsettle(newVy: number = 0.5): void {
     this.settled = false;
     this.vy = newVy;
+    this.settledFrames = 0;  // Reset stability when disturbed
   }
 
-  moveTo(col: number, row: number): void {
-    this.col = col;
-    this.row = row;
-  }
-
-  isVisible(): boolean {
-    return this.active && this.row >= 0;
+  incrementSettledFrames(): void {
+    if (this.settled && this.settledFrames < 120) {
+      this.settledFrames++;
+    }
   }
 }

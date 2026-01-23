@@ -1,0 +1,42 @@
+<section class="music-section">
+  <div class="section-header">
+    <h2>
+      <i class="fas fa-headphones"></i>
+      What I'm Listening To
+    </h2>
+    <p class="section-subtitle">Some albums that shaped my taste in music</p>
+  </div>
+
+  <div class="albums-grid">
+    @for (album of albums; track album.id; let i = $index) {
+      <div
+        class="album-card fade-slide-up"
+        [class.stagger-1]="i === 0"
+        [class.stagger-2]="i === 1"
+        [class.stagger-3]="i === 2"
+        [class.stagger-4]="i === 3"
+        [class.stagger-5]="i === 4"
+        [class.stagger-6]="i === 5"
+        (click)="openSpotify(album)"
+        [class.clickable]="album.spotifyUrl"
+      >
+        <div class="album-cover">
+          <img [src]="album.coverUrl" [alt]="album.title + ' by ' + album.artist" loading="lazy" />
+          <div class="album-overlay">
+            <div class="album-info">
+              <h3 class="album-title">{{ album.title }}</h3>
+              <p class="album-artist">{{ album.artist }}</p>
+              <span class="album-year">{{ album.year }}</span>
+            </div>
+            @if (album.spotifyUrl) {
+              <button class="spotify-btn">
+                <i class="fab fa-spotify"></i>
+                Play on Spotify
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>

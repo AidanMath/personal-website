@@ -1,0 +1,168 @@
+// ===========================================
+// Reusable SCSS Mixins
+// ===========================================
+
+@use 'variables' as v;
+
+// ---- Responsive Breakpoints ----
+@mixin respond-to($breakpoint) {
+  @if map-has-key(v.$breakpoints, $breakpoint) {
+    @media (max-width: map-get(v.$breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$breakpoint}";
+  }
+}
+
+@mixin respond-above($breakpoint) {
+  @if map-has-key(v.$breakpoints, $breakpoint) {
+    @media (min-width: map-get(v.$breakpoints, $breakpoint)) {
+      @content;
+    }
+  }
+}
+
+// ---- Glass Morphism Effect ----
+@mixin glass-effect($bg-opacity: 0.8, $blur: 10px, $border-opacity: 0.2) {
+  background: rgba(255, 255, 255, $bg-opacity);
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid rgba(59, 130, 246, $border-opacity);
+}
+
+// ---- Card Hover Effect ----
+@mixin card-hover($translate-y: -4px) {
+  transition:
+    transform var(--transition-smooth),
+    box-shadow var(--transition-smooth),
+    border-color var(--transition-smooth);
+
+  &:hover {
+    transform: translateY($translate-y);
+    border-color: var(--accent);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+  }
+}
+
+// ---- Responsive Grid ----
+@mixin responsive-grid($cols-xl: 4, $cols-lg: 3, $cols-md: 2, $cols-sm: 1, $gap: 1.5rem) {
+  display: grid;
+  grid-template-columns: repeat($cols-xl, 1fr);
+  gap: $gap;
+
+  @include respond-to('xl') {
+    grid-template-columns: repeat($cols-lg, 1fr);
+  }
+
+  @include respond-to('md') {
+    grid-template-columns: repeat($cols-md, 1fr);
+  }
+
+  @include respond-to('sm') {
+    grid-template-columns: repeat($cols-sm, 1fr);
+  }
+}
+
+// ---- Icon Button ----
+@mixin icon-button($size: 40px, $bg: var(--surface-light)) {
+  width: $size;
+  height: $size;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $bg;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+
+  &:hover {
+    transform: translateY(-3px);
+    background: var(--accent);
+    color: white;
+  }
+}
+
+// ---- Section Padding ----
+@mixin section-padding($y: var(--space-3xl), $x: var(--space-xl)) {
+  padding: $y $x;
+
+  @include respond-to('md') {
+    padding: var(--space-2xl) var(--space-lg);
+  }
+}
+
+// ---- Text Truncation ----
+@mixin text-truncate($lines: 1) {
+  @if $lines == 1 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+// ---- Custom Scrollbar ----
+@mixin custom-scrollbar($width: 8px, $track-bg: var(--bg-secondary), $thumb-bg: #cbd5e1) {
+  &::-webkit-scrollbar {
+    width: $width;
+    height: $width;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $track-bg;
+    border-radius: calc($width / 2);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $thumb-bg;
+    border-radius: calc($width / 2);
+
+    &:hover {
+      background: #94a3b8;
+    }
+  }
+}
+
+// ---- Flex Center ----
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// ---- Flex Between ----
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// ---- Absolute Fill ----
+@mixin absolute-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+// ---- Focus Visible ----
+@mixin focus-visible {
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+// ---- Interactive Element ----
+@mixin interactive {
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+  @include focus-visible;
+}

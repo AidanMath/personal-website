@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sand Grain Test Render</title>
+  <style>
+    body {
+      margin: 0;
+      background: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      font-family: sans-serif;
+      color: #fff;
+    }
+    h1 { margin-bottom: 20px; }
+    #info { margin-bottom: 10px; color: #888; }
+    canvas {
+      background: #e8dcc8; /* Hokusai sky color */
+      border: 1px solid #444;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sand Grain Test Render</h1>
+  <div id="info">Loading grain data...</div>
+  <canvas id="canvas"></canvas>
+
+  <script type="module">
+    // Import the grain data
+    const dataModule = await import('../src/app/components/sand-background/sand-grains-data.ts');
+    const { IMAGE_GRAIN_DATA, IMAGE_METADATA } = dataModule;
+
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const info = document.getElementById('info');
+
+    // Set canvas size
+    const pixelSize = 4;
+    const width = IMAGE_METADATA.cols * pixelSize;
+    const height = IMAGE_METADATA.rows * pixelSize;
+
+    canvas.width = width;
+    canvas.height = height;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+
+    info.textContent = `Grid: ${IMAGE_METADATA.cols}x${IMAGE_METADATA.rows}, Grains: ${IMAGE_GRAIN_DATA.length}, Canvas: ${width}x${height}`;
+
+    // Clear with sky color
+    ctx.fillStyle = '#e8dcc8';
+    ctx.fillRect(0, 0, width, height);
+
+    // Draw each grain
+    for (const grain of IMAGE_GRAIN_DATA) {
+      const r = Math.round(grain.color[0] * 255);
+      const g = Math.round(grain.color[1] * 255);
+      const b = Math.round(grain.color[2] * 255);
+
+      ctx.fillStyle = `rgb(${r},${g},${b})`;
+      ctx.fillRect(
+        grain.x * pixelSize,
+        grain.y * pixelSize,
+        pixelSize - 1,
+        pixelSize - 1
+      );
+    }
+
+    console.log('Rendered', IMAGE_GRAIN_DATA.length, 'grains');
+    console.log('First 5 grains:', IMAGE_GRAIN_DATA.slice(0, 5));
+    console.log('Metadata:', IMAGE_METADATA);
+  </script>
+</body>
+</html>

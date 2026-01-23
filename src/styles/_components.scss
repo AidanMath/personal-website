@@ -1,0 +1,261 @@
+// ===========================================
+// Shared Component Patterns
+// ===========================================
+
+@use 'mixins' as m;
+
+// ---- Glass Card ----
+.glass-card {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  @include m.card-hover;
+}
+
+// ---- Glass Section ----
+.glass-section {
+  @include m.glass-effect(0.7, 10px, 0.2);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+
+// ---- Section Header ----
+.section-header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+
+  h2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    font-size: 1.75rem;
+    color: var(--text-primary);
+    margin: 0 0 0.75rem;
+
+    i {
+      color: var(--accent);
+    }
+  }
+
+  .section-subtitle {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    margin: 0;
+  }
+}
+
+// ---- Section Divider ----
+.section-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--surface-border) 20%,
+    var(--accent) 50%,
+    var(--surface-border) 80%,
+    transparent 100%
+  );
+  margin: 0 auto;
+  max-width: 400px;
+  opacity: 0.5;
+}
+
+// ---- Button Base ----
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+  border: none;
+  @include m.focus-visible;
+
+  &--primary {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 2px 8px var(--accent-glow);
+
+    &:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+  }
+
+  &--secondary {
+    background: var(--surface);
+    color: var(--text-primary);
+    border: 1px solid var(--surface-border);
+
+    &:hover {
+      background: var(--surface-light);
+      border-color: var(--accent);
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: var(--text-muted);
+
+    &:hover {
+      background: var(--surface-light);
+      color: var(--text-primary);
+    }
+  }
+}
+
+// ---- Tag/Badge ----
+.tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0.3rem 0.6rem;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  color: var(--text-muted);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+
+  &--success {
+    background: var(--success);
+    color: white;
+  }
+
+  &--accent {
+    background: var(--accent);
+    color: white;
+  }
+}
+
+// ---- Card Base ----
+.card {
+  background: var(--bg-primary);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  @include m.card-hover;
+
+  &__image {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+  }
+
+  &:hover &__image img {
+    transform: scale(1.05);
+  }
+
+  &__content {
+    padding: var(--space-lg);
+  }
+
+  &__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem;
+  }
+
+  &__description {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    @include m.text-truncate(2);
+  }
+}
+
+// ---- Filter Tabs ----
+.filter-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+  padding: 0 var(--space-xl);
+}
+
+.filter-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+  @include m.interactive;
+
+  .count {
+    background: var(--bg-secondary);
+    padding: 0.15rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  &:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  &.is-active {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    color: var(--accent);
+
+    .count {
+      background: var(--accent);
+      color: white;
+    }
+  }
+}
+
+// ---- Scroll Hint ----
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+
+  span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .arrow {
+    width: 20px;
+    height: 20px;
+    margin: 12px auto 0;
+    border-right: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+    transform: rotate(45deg);
+    animation: bounce 2s infinite;
+  }
+}

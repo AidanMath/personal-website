@@ -1,0 +1,83 @@
+$bg: #000000;
+$card-bg: rgba(10, 10, 10, 0.85);
+$card-border: #1a1a1a;
+$accent: #00d4ff;
+$white: #ffffff;
+$gray: #888888;
+$dark-gray: #333333;
+
+.not-found-content {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.error-card {
+  text-align: center;
+  max-width: 480px;
+  padding: 64px 48px;
+  background: $card-bg;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid $card-border;
+  border-radius: 16px;
+
+  h1 {
+    font-size: 6rem;
+    font-weight: 700;
+    color: $white;
+    margin: 0 0 8px;
+    letter-spacing: -4px;
+    line-height: 1;
+  }
+
+  .message {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: $white;
+    margin: 0 0 16px;
+  }
+
+  .description {
+    font-size: 0.95rem;
+    color: $gray;
+    line-height: 1.6;
+    margin: 0 0 32px;
+  }
+}
+
+.home-btn {
+  display: inline-block;
+  padding: 14px 32px;
+  background: $white;
+  border: none;
+  border-radius: 8px;
+  color: $bg;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15);
+  }
+}
+
+@media (max-width: 480px) {
+  .error-card {
+    padding: 48px 32px;
+
+    h1 {
+      font-size: 4rem;
+    }
+
+    .message {
+      font-size: 1.25rem;
+    }
+  }
+}

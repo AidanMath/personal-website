@@ -1,6 +1,24 @@
 import { SandGrain } from '../models/sand-grain.model';
 import { SandGrid } from '../models/sand-grid.model';
 
+// Interaction constants - tuned for fluid, brushstroke feel
+const INTERACTION_RADIUS_DESKTOP = 30;
+const INTERACTION_RADIUS_MOBILE = 40; // Larger for touch
+const VELOCITY_DECAY = 0.92;
+const MIN_SPEED_THRESHOLD = 0.2;
+const INTERACTION_STRENGTH = 1.8;
+const SCATTER_RANDOMNESS = 0.15;
+const INITIAL_MOUSE_POSITION = -1000;
+
+// Detect if touch device
+const isTouchDevice = (): boolean => {
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+};
+
+const getInteractionRadius = (): number => {
+  return isTouchDevice() ? INTERACTION_RADIUS_MOBILE : INTERACTION_RADIUS_DESKTOP;
+};
+
 export interface MouseState {
   x: number;
   y: number;
@@ -11,27 +29,25 @@ export interface MouseState {
 }
 
 export interface InteractionConfig {
-  trailRadius: number;
+  interactionRadius: number;
   velocityDecay: number;
   minSpeedThreshold: number;
-  pushStrength: number;
-  liftStrength: number;
+  interactionStrength: number;
 }
 
 const DEFAULT_CONFIG: InteractionConfig = {
-  trailRadius: 12,           // Smaller, more precise trail
-  velocityDecay: 0.9,
-  minSpeedThreshold: 0.3,
-  pushStrength: 2.5,         // How hard grains push to the side
-  liftStrength: 1.5,         // How much grains lift up
+  interactionRadius: getInteractionRadius(),
+  velocityDecay: VELOCITY_DECAY,
+  minSpeedThreshold: MIN_SPEED_THRESHOLD,
+  interactionStrength: INTERACTION_STRENGTH,
 };
 
 export class MouseInteractionService {
   private config: InteractionConfig;
-  private mouseX = -1000;
-  private mouseY = -1000;
-  private lastMouseX = -1000;
-  private lastMouseY = -1000;
+  private mouseX = INITIAL_MOUSE_POSITION;
+  private mouseY = INITIAL_MOUSE_POSITION;
+  private lastMouseX = INITIAL_MOUSE_POSITION;
+  private lastMouseY = INITIAL_MOUSE_POSITION;
   private velX = 0;
   private velY = 0;
 
@@ -70,94 +86,54 @@ export class MouseInteractionService {
     const state = this.getState();
     if (!state.isMoving) return;
 
-    const trailRadiusCells = Math.ceil(this.config.trailRadius / pixelSize);
-
-    // Normalize mouse velocity for direction
-    const mouseLen = state.speed;
-    if (mouseLen < 0.1) return;
-
-    const normVelX = state.velX / mouseLen;
-    const normVelY = state.velY / mouseLen;
-
-    // Perpendicular direction (rotate 90 degrees) - this is the "push to side" direction
-    const perpX = -normVelY;
-    const perpY = normVelX;
+    const radius = this.config.interactionRadius;
+    const radiusSq = radius * radius;
 
     for (const grain of grains) {
-      if (!grain.settled) continue;
+      if (!grain.settled || !grain.active) continue;
 
-      // Calculate distance from grain center to mouse
-      const grainCenterX = grain.col * pixelSize + pixelSize / 2;
-      const grainCenterY = grain.row * pixelSize + pixelSize / 2;
+      // Calculate grain center in pixel coordinates
+      const grainCenterX = grain.x * pixelSize + pixelSize / 2;
+      const grainCenterY = grain.y * pixelSize + pixelSize / 2;
+
       const dx = grainCenterX - state.x;
       const dy = grainCenterY - state.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
+      const distSq = dx * dx + dy * dy;
 
-      // Check if within trail radius
-      if (dist >= this.config.trailRadius) continue;
+      if (distSq >= radiusSq) continue;
 
-      // Determine which side of the mouse path the grain is on (cross product)
-      const crossProduct = dx * normVelY - dy * normVelX;
-      const side = Math.sign(crossProduct) || 1;
+      const dist = Math.sqrt(distSq);
+      // Smooth cubic falloff for fluid feel
+      const t = dist / radius;
+      const falloff = 1 - (t * t * (3 - 2 * t)); // Smoothstep
+      const strength = falloff * this.config.interactionStrength;
 
-      // Calculate push strength based on distance (closer = stronger)
-      const distanceFactor = 1 - (dist / this.config.trailRadius);
-      const strength = distanceFactor * this.config.pushStrength;
+      // Direction away from mouse with slight scatter
+      const pushAngle = Math.atan2(dy, dx);
+      const scatter = (Math.random() - 0.5) * Math.PI * SCATTER_RANDOMNESS;
 
-      // Calculate target position: push perpendicular + slight lift
-      const pushColDelta = Math.round(perpX * side * strength);
-      const pushRowDelta = Math.round(perpY * side * strength - this.config.liftStrength * distanceFactor);
+      // Blend radial push with mouse movement direction for flowing feel
+      const mouseAngle = Math.atan2(state.velY, state.velX);
+      const blendedAngle = pushAngle * 0.6 + mouseAngle * 0.4 + scatter;
 
-      const targetCol = Math.max(0, Math.min(grid.cols - 1, grain.col + pushColDelta));
-      const targetRow = Math.max(0, Math.min(grid.rows - 1, grain.row + pushRowDelta));
+      // Calculate push - mainly horizontal with gentle lift
+      const pushX = Math.cos(blendedAngle) * strength;
+      const pushY = Math.sin(blendedAngle) * strength - strength * 0.3;
 
-      // Only move if there's actually a change
-      if (targetCol === grain.col && targetRow === grain.row) continue;
+      const col = Math.floor(grain.x);
+      const row = Math.floor(grain.y);
 
-      // Remove from grid and unsettle - let physics handle finding a new spot
-      grid.removeGrain(grain);
-      grain.unsettle(0.5);
+      // Apply push gradually (don't teleport)
+      const newCol = Math.max(0, Math.min(grid.cols - 1, col + Math.round(pushX)));
+      const newRow = Math.max(0, Math.min(grid.rows - 1, row + Math.round(pushY)));
 
-      // Move to target position (or nearby if occupied)
-      if (grid.isEmpty(targetCol, targetRow)) {
-        grain.moveTo(targetCol, targetRow);
-      } else {
-        // Try to find nearby empty spot, prioritizing upward
-        const newPos = this.findNearbyEmpty(grid, targetCol, targetRow, grain.col, grain.row);
-        if (newPos) {
-          grain.moveTo(newPos.col, newPos.row);
-        }
-        // If no spot found, grain stays at original position but unsettled
-        // Physics will make it fall and find a new home
+      if (newCol !== col || newRow !== row) {
+        grid.removeGrain(grain);
+        // Give grain velocity for fluid continuation
+        grain.unsettle(strength * 0.5 + Math.random() * 0.3);
+        grain.x = newCol;
+        grain.y = newRow;
       }
     }
-  }
-
-  private findNearbyEmpty(
-    grid: SandGrid,
-    targetCol: number,
-    targetRow: number,
-    fromCol: number,
-    fromRow: number
-  ): { col: number; row: number } | null {
-    // Search in expanding radius, prioritizing positions above (lower row numbers)
-    for (let radius = 1; radius <= 5; radius++) {
-      // Check upward first (negative row delta)
-      for (let dRow = -radius; dRow <= radius; dRow++) {
-        for (let dCol = -radius; dCol <= radius; dCol++) {
-          if (Math.abs(dCol) !== radius && Math.abs(dRow) !== radius) continue;
-
-          const checkCol = targetCol + dCol;
-          const checkRow = targetRow + dRow;
-
-          if (checkCol === fromCol && checkRow === fromRow) continue;
-          if (!grid.isValidPosition(checkCol, checkRow)) continue;
-          if (grid.isEmpty(checkCol, checkRow)) {
-            return { col: checkCol, row: checkRow };
-          }
-        }
-      }
-    }
-    return null;
   }
 }

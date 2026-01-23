@@ -105,7 +105,8 @@ describe('SandPhysicsService', () => {
     it('should unsettle grains when there is space below', () => {
       const service = new SandPhysicsService({
         enableGapFilling: true,
-        gapFillChance: 1.0 // Always check
+        gapFillChance: 1.0, // Always check for supported grains
+        gapFillChanceUnsupported: 1.0 // Always check for unsupported grains
       });
 
       const grain = new SandGrain({

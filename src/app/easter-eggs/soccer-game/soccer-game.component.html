@@ -1,0 +1,50 @@
+<div class="soccer-game-overlay" (click)="onClose()">
+  <div class="soccer-game-modal" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="onClose()">
+      <i class="fas fa-times"></i>
+    </button>
+
+    <div class="game-header">
+      <h2>Keepie-Uppie</h2>
+      <p class="game-prompt">Keep the ball in the air!</p>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat">
+        <span class="stat-label">Score</span>
+        <span class="stat-value">{{ score }}</span>
+      </div>
+      <div class="stat high-score">
+        <span class="stat-label">Best</span>
+        <span class="stat-value">{{ highScore }}</span>
+      </div>
+    </div>
+
+    <div class="canvas-container">
+      <canvas
+        #gameCanvas
+        class="game-canvas"
+        (click)="onCanvasClick($event)"
+        (touchstart)="onCanvasClick($event)"
+      ></canvas>
+
+      @if (!isPlaying || gameOver) {
+        <div class="start-overlay" (click)="restartGame()">
+          <div class="start-content">
+            @if (gameOver) {
+              <i class="fas fa-futbol game-icon"></i>
+              <p>Tap to play again</p>
+            } @else {
+              <i class="fas fa-futbol game-icon spinning"></i>
+              <p>Tap the ball to keep it up!</p>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="game-instructions">
+      <p><i class="fas fa-hand-pointer"></i> Tap or click near the ball to kick it</p>
+    </div>
+  </div>
+</div>

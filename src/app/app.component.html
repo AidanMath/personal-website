@@ -1,15 +1,121 @@
-<app-sand-background></app-sand-background>
-<app-navbar></app-navbar>
-<main>
-  <app-hero></app-hero>
-  <app-about></app-about>
-  <app-projects></app-projects>
-  <app-hobbies (openChessPuzzle)="openChessPuzzle()"></app-hobbies>
-  <app-contact></app-contact>
-</main>
-<app-footer></app-footer>
+<!-- Hero Section with Sand -->
+<section class="hero">
+  <div class="sand-container">
+    <app-sand-background></app-sand-background>
+  </div>
+  <div class="hero-content">
+    <h1>Aidan Math</h1>
+    <p class="tagline">Software Developer</p>
+    <p class="intro">Building elegant solutions to complex problems through code, creativity, and curiosity.</p>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll to explore</span>
+    <div class="arrow"></div>
+  </div>
+</section>
 
-<!-- Easter Eggs -->
+<!-- Main Content -->
+<main class="content">
+  <!-- About Section -->
+  <section class="section about-section">
+    <h2><i class="fas fa-user"></i> About Me</h2>
+    <div class="about-content">
+      <div class="about-text">
+        <p>
+          I'm a software developer with a passion for creating interactive experiences
+          and solving challenging problems. I enjoy exploring the intersection of technology
+          and creativity, whether it's building physics simulations, visualizing data structures,
+          or crafting intuitive user interfaces.
+        </p>
+        <p>
+          When I'm not coding, you can find me playing soccer, working through chess puzzles,
+          or discovering new music. I believe the best software comes from curiosity and a
+          willingness to experiment.
+        </p>
+      </div>
+      <div class="skills-card">
+        <h3>Technologies</h3>
+        <div class="skills-grid">
+          <span>TypeScript</span>
+          <span>Angular</span>
+          <span>Python</span>
+          <span>Java</span>
+          <span>WebGL</span>
+          <span>Spring Boot</span>
+          <span>Node.js</span>
+          <span>REST APIs</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- Projects Section -->
+  <section class="section projects-section">
+    <h2><i class="fas fa-code"></i> Projects</h2>
+    <div class="projects-grid">
+      @for (project of projects; track project.title; let i = $index) {
+        <article class="project" [class.featured]="i === 0">
+          <div class="project-number">{{ (i + 1).toString().padStart(2, '0') }}</div>
+          <h3>{{ project.title }}</h3>
+          <p>{{ project.description }}</p>
+          <div class="project-footer">
+            <div class="tags">
+              @for (tag of project.tags; track tag) {
+                <span>{{ tag }}</span>
+              }
+            </div>
+            @if (project.github) {
+              <a [href]="project.github" target="_blank" class="project-link">
+                View Code <i class="fas fa-arrow-right"></i>
+              </a>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- Travel Section -->
+  <section class="section travel-wrapper">
+    <app-travel></app-travel>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- Contact Section -->
+  <section class="section contact-section">
+    <h2><i class="fas fa-envelope"></i> Get in Touch</h2>
+    <p class="contact-text">
+      Interested in working together or just want to say hi? Feel free to reach out!
+    </p>
+    <div class="contact-links">
+      <a href="mailto:your.email@example.com">
+        <i class="fas fa-envelope"></i> Email
+      </a>
+      <a href="https://github.com/AidanMath" target="_blank">
+        <i class="fab fa-github"></i> GitHub
+      </a>
+      <a href="https://linkedin.com/in/yourusername" target="_blank">
+        <i class="fab fa-linkedin"></i> LinkedIn
+      </a>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer>
+  <p>Play with the sand above</p>
+</footer>
+
+<!-- Easter Egg Modals -->
 @if (showChessPuzzle) {
   <app-chess-puzzle (close)="closeChessPuzzle()"></app-chess-puzzle>
+}
+
+@if (showSoccerGame) {
+  <app-soccer-game (close)="closeSoccerGame()"></app-soccer-game>
 }

@@ -1,0 +1,73 @@
+<section class="travel-section">
+  <div class="section-header">
+    <h2>
+      <i class="fas fa-plane-departure"></i>
+      Places & Adventures
+    </h2>
+    <p class="section-subtitle">Where I've been and where I'm dreaming of going</p>
+  </div>
+
+  <div class="filter-tabs">
+    <button
+      class="filter-tab"
+      [class.active]="activeFilter === 'all'"
+      (click)="setFilter('all')"
+    >
+      All Places
+      <span class="count">{{ places.length }}</span>
+    </button>
+    <button
+      class="filter-tab"
+      [class.active]="activeFilter === 'visited'"
+      (click)="setFilter('visited')"
+    >
+      <i class="fas fa-check-circle"></i>
+      Visited
+      <span class="count">{{ visitedCount }}</span>
+    </button>
+    <button
+      class="filter-tab"
+      [class.active]="activeFilter === 'bucket-list'"
+      (click)="setFilter('bucket-list')"
+    >
+      <i class="fas fa-star"></i>
+      Bucket List
+      <span class="count">{{ bucketListCount }}</span>
+    </button>
+  </div>
+
+  <div class="places-container">
+    <div class="places-grid">
+      @for (place of filteredPlaces; track place.id; let i = $index) {
+        <div
+          class="place-card"
+          [class.visited]="place.visited"
+          [class.bucket-list]="!place.visited"
+        >
+          <div class="place-image">
+            <img [src]="place.imageUrl" [alt]="place.name" loading="lazy" />
+            <div class="place-badge" [class.visited]="place.visited">
+              @if (place.visited) {
+                <i class="fas fa-check"></i>
+                Visited
+              } @else {
+                <i class="fas fa-star"></i>
+                Bucket List
+              }
+            </div>
+          </div>
+          <div class="place-content">
+            <div class="place-header">
+              <span class="flag">{{ getFlagEmoji(place.countryCode) }}</span>
+              <div class="place-titles">
+                <h3 class="place-name">{{ place.name }}</h3>
+                <span class="place-country">{{ place.country }}</span>
+              </div>
+            </div>
+            <p class="place-description">{{ place.description }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

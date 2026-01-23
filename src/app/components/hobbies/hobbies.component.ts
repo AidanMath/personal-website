@@ -19,6 +19,7 @@ interface Hobby {
 })
 export class HobbiesComponent {
   @Output() openChessPuzzle = new EventEmitter<void>();
+  @Output() openSoccerGame = new EventEmitter<void>();
 
   hobbies: Hobby[] = [
     {
@@ -26,9 +27,9 @@ export class HobbiesComponent {
       title: 'Soccer',
       icon: 'fas fa-futbol',
       description: 'Lifelong fan of the beautiful game. Whether playing, watching, or analyzing tactics, soccer is my go-to sport.',
-      funFact: 'Favorite team: [Your team here]',
+      funFact: 'Click to play keepie-uppie!',
       color: '#22c55e',
-      clickable: false
+      clickable: true
     },
     {
       id: 'chess',
@@ -53,6 +54,8 @@ export class HobbiesComponent {
   onHobbyClick(hobbyId: string): void {
     if (hobbyId === 'chess') {
       this.openChessPuzzle.emit();
+    } else if (hobbyId === 'soccer') {
+      this.openSoccerGame.emit();
     }
   }
 }
