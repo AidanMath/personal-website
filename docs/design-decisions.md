@@ -20,7 +20,7 @@ Last updated: 2026-11-06
 | Fishing equipment | ✅ Done |
 | Fishing mechanics | ✅ Done |
 | Fish ecosystem | 🟡 In progress |
-| Economy | ⬜ Not started |
+| Economy | 🟡 In progress |
 | Multiplayer | ⬜ Not started |
 | Art direction | 🟡 Partly covered |
 | Retention | 🟡 Partly covered |
@@ -231,14 +231,41 @@ Reference games: Fisch, Fish It!, Fishing Simulator (Roblox), Dredge, Russian Fi
 - Shared body types reshaped into many species, to keep AI modeling practical
 
 **Open**
-- Fish value and pricing
 - Which species live in which region and depth layer
 - Which events are scheduled and which are random
 
 ---
 
+## Economy
+
+**Confirmed**
+- **Money is always a little tight**, so every purchase is a real decision.
+- **Tightness comes from big purchases** (boats, gear tiers), not from bills. **Running costs stay small** (fuel, bait, repairs, fast-travel and tow fees); a trip should almost always pay for itself.
+- **The first meaningful upgrade comes soon** (within about 10 minutes): the player **chooses a better line or a better rod.**
+- **Fish value = base species price × weight × color variant bonus.**
+- **Prices use all three layers:**
+  - **Fixed base price** for each species
+  - **Daily market** at HQ: a few species in demand (about +50%), a few flooded (about −25%)
+  - **Selling a lot of the same fish lowers your price for a while** (kept gentle)
+
+**Proposed: first 30 minutes**
+
+| Time | What happens |
+|---|---|
+| 0–2 min | Arrive at the lake cabin; first catch is easy and quick |
+| 2–5 min | A few lake fish, the first "new species!" reveal, learn nibble vs. take |
+| 5–8 min | First sale, first look at the order catalog |
+| 8–10 min | First upgrade: choose a better line or a better rod |
+| 10–20 min | First optional contract, first bait choice, a rumor of the lake legend |
+| 20–30 min | Saving toward the reef runner; the economy starts to feel tight |
+
+**Open**
+- Actual prices and numbers
+- Money sinks and long-term wealth (what rich players spend on)
+
+---
+
 ## Not started yet
-- Economy: prices, fish values, fuel and fast-travel costs, money sinks, long-term wealth
 - Multiplayer: shared fishing, competitions, trading, cooperation, group contracts
 - Art direction in detail: environments, animations, UI style guide
 - Retention: long-term goals, update plan, daily and weekly loops
