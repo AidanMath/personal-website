@@ -20,7 +20,7 @@ Last updated: 2026-11-06
 | Fishing equipment | ✅ Done |
 | Fishing mechanics | ✅ Done |
 | Fish ecosystem | 🟡 In progress |
-| Economy | 🟡 In progress |
+| Economy | ✅ Done (numbers later) |
 | Multiplayer | ⬜ Not started |
 | Art direction | 🟡 Partly covered |
 | Retention | 🟡 Partly covered |
@@ -259,9 +259,24 @@ Reference games: Fisch, Fish It!, Fishing Simulator (Roblox), Dredge, Russian Fi
 | 10–20 min | First optional contract, first bait choice, a rumor of the lake legend |
 | 20–30 min | Saving toward the reef runner; the economy starts to feel tight |
 
+- **Long-term wealth goes to:** a bigger HQ (warehouses, bigger dock, storefront), prestige cosmetics, legend hunts (specialty bait, expeditions), and records and leaderboards. **No prestige reset.**
+- **Rule for side earners: they give players a reason to fish and never replace fishing.**
+- **Side ways to make money:**
+  - **Stocks:** an HQ upgrade (a trading desk) for investing in fictional in-world companies whose prices react to game events (migrations, storms, scheduled events). In-game money only, never Robux.
+  - **Tournaments:** entry fees and prizes (details in multiplayer)
+  - **Seafood restaurant:** an HQ wing that runs **passively** (set a menu, it earns over time)
+  - **Artifacts:** salvaged and sold, or kept
+- Cut for now: aquarium exhibit, charter tours, auction house
+
+**Proposed**
+- Show the price breakdown on the sell screen (base, demand, saturation)
+- Stocks: cap investment by HQ level or reputation; returns stay below active fishing per hour
+- Check Roblox's current rules on gambling-style mechanics before building stocks
+- Restaurant: turn flooded fish into meals; recipes discovered by combining species; crew can run the kitchen late game
+- Artifacts: found by snags while deep fishing, a magnet-fishing tool, and sunken ruins; some hold clues to regional legends
+
 **Open**
-- Actual prices and numbers
-- Money sinks and long-term wealth (what rich players spend on)
+- Actual prices and numbers (during build)
 
 ---
 
