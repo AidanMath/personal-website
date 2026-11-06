@@ -21,7 +21,7 @@ Last updated: 2026-11-06
 | Fishing mechanics | ✅ Done |
 | Fish ecosystem | 🟡 In progress |
 | Economy | ✅ Done (numbers later) |
-| Multiplayer | ⬜ Not started |
+| Multiplayer | ✅ Done |
 | Art direction | 🟡 Partly covered |
 | Retention | 🟡 Partly covered |
 
@@ -280,8 +280,26 @@ Reference games: Fisch, Fish It!, Fishing Simulator (Roblox), Dredge, Russian Fi
 
 ---
 
+## Multiplayer
+
+**Confirmed**
+- **Side-by-side play:** everyone fishes in the same world and mostly plays alone, with no shared boats.
+- **No trading** between players (avoids scams).
+- **Other players' engine noise never affects your bites** (prevents griefing).
+- **Light co-op extras:**
+  - Fishing-together bonus (a small boost when friends fish near each other)
+  - Join a friend (fast-travel to a friend, if you've unlocked that region)
+  - Convoys (sail to new regions as a group)
+  - HQ visits (see a friend's trophies, fleet, and restaurant)
+  - Group contracts (for friends or the whole server)
+- **Tournaments:**
+  - Formats: biggest fish, most total weight, target species, variant hunt
+  - Scale: **server tournaments** (about 15–20 minutes, several times a day) and **global tournaments** (weekly or during events)
+  - Fairness: **brackets by progress** and **gear-limited tournaments**
+
+---
+
 ## Not started yet
-- Multiplayer: shared fishing, competitions, trading, cooperation, group contracts
 - Art direction in detail: environments, animations, UI style guide
 - Retention: long-term goals, update plan, daily and weekly loops
 - Build planning: launch scope, milestones, tech setup (Roblox Studio, Rojo, MCPs)
