@@ -23,7 +23,7 @@ Last updated: 2026-11-06
 | Economy | ✅ Done (numbers later) |
 | Multiplayer | ✅ Done |
 | Art direction | ✅ Done |
-| Retention | 🟡 Partly covered |
+| Retention | ✅ Done |
 
 ---
 
@@ -327,6 +327,17 @@ Reference games: Fisch, Fish It!, Fishing Simulator (Roblox), Dredge, Russian Fi
 
 ---
 
+## Retention
+
+**Confirmed**
+- Daily reasons to return: contract board, daily market, checking passive gear, server tournaments
+- Weekly: global tournaments, migrations, scheduled events
+- Long-term: boat fleet, gear tiers, reputation, HQ growth, legends, records, stocks, artifacts
+- **No catch-log completion rewards** (collecting is its own reward)
+- **No seasons**
+- **Regular content updates whenever they're ready** (new species, legends, event types, boats), with no fixed seasonal structure
+
+---
+
 ## Not started yet
-- Retention: long-term goals, update plan, daily and weekly loops
 - Build planning: launch scope, milestones, tech setup (Roblox Studio, Rojo, MCPs)
