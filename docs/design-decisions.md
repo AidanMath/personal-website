@@ -22,7 +22,7 @@ Last updated: 2026-11-06
 | Fish ecosystem | 🟡 In progress |
 | Economy | ✅ Done (numbers later) |
 | Multiplayer | ✅ Done |
-| Art direction | 🟡 Partly covered |
+| Art direction | ✅ Done |
 | Retention | 🟡 Partly covered |
 
 ---
@@ -299,7 +299,34 @@ Reference games: Fisch, Fish It!, Fishing Simulator (Roblox), Dredge, Russian Fi
 
 ---
 
+## Art direction
+
+**Confirmed**
+- **Storybook and atmospheric soft toon:** mood comes from lighting, fog, sky colors, and weather, not detailed models (simple AI-made models plus strong lighting).
+- **UI: modern nautical.** Modern in how it works (clean, rounded, easy-to-tap cards, big readable text), nautical in how it looks (rope or brass trim, compass icons, faint sea-chart textures). The **catch log looks like a real logbook.**
+- **Players use their own Roblox avatars.**
+- **Fishing outfits are cosmetic only** (raincoats, waders, captain hats, a fjord parka), with no stat bonuses.
+- **Trophy pose:** your avatar holds up big catches for a photo moment.
+- **Sound: ambient plus music per region, with dynamic music** that rises during big fights and legend encounters.
+
+**Region moods**
+
+| Region | Mood | Colors | Light |
+|---|---|---|---|
+| Lake | Cozy, home | Greens, warm wood | Golden mornings, fireflies at night |
+| Lagoon | Bright, inviting | Turquoise, sand, coral | Sparkling midday sun |
+| Mangroves | Humid, mysterious | Deep greens, murky brown | Hazy, shafts of light |
+| Volcanic | Strange, warm | Black rock, orange glow | Steam, glowing vents at night |
+| Fjord | Cold, quiet, lonely | Icy blues, white | Pale light, northern lights |
+| Trench | Vast, ominous | Dark navy, storm grey | Heavy storms, lightning |
+
+**Proposed**
+- Graphics-quality settings so the atmospheric effects run on cheap phones
+- A Figma style guide before any UI is built
+- Casting, reeling, and fighting animations are a top art priority
+
+---
+
 ## Not started yet
-- Art direction in detail: environments, animations, UI style guide
 - Retention: long-term goals, update plan, daily and weekly loops
 - Build planning: launch scope, milestones, tech setup (Roblox Studio, Rojo, MCPs)
