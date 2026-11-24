@@ -24,6 +24,7 @@ Last updated: 2026-11-06
 | Multiplayer | ✅ Done |
 | Art direction | ✅ Done |
 | Retention | ✅ Done |
+| Build planning | 🟡 In progress |
 
 ---
 
@@ -339,5 +340,26 @@ Reference games: Fisch, Fish It!, Fishing Simulator (Roblox), Dredge, Russian Fi
 
 ---
 
-## Not started yet
-- Build planning: launch scope, milestones, tech setup (Roblox Studio, Rojo, MCPs)
+## Build planning
+
+**Confirmed**
+- **Launch option B:** all six regions at launch with the core systems (fishing, boats, gear, HQ, contracts, daily market, server tournaments). **Added later as updates:** stocks, restaurant, artifacts, crew, global tournaments.
+- **Build a small lake test first** to prove the fishing is fun before building anything else.
+- **Milestones:**
+
+| # | Milestone | What it includes | Goal |
+|---|---|---|---|
+| 0 | Setup | Roblox Studio, code in GitHub, Figma style guide started, Blender connection | Tools ready |
+| 1 | Lake test | Cast, bite, fight, land, sell, line/rod upgrade; rowboat; 3–5 lake fish in rough art | Is the fishing fun? Test with friends. |
+| 2 | Core loop | Gear tiers, bait, catch log, cabin and HQ, order catalog, daily market, saved progress | A full loop at the lake |
+| 3 | World | All 6 regions roughed out, boat lineup, hazards, outposts, fast travel, fuel | The whole map playable |
+| 4 | Content | 40–50 fish, legends, events, contracts, full art and sound pass | Feels like the real game |
+| 5 | Launch prep | Server tournaments, co-op extras, cosmetics store, phone performance, outside playtest | Launch |
+| — | Updates | Stocks, restaurant, artifacts, crew, global tournaments, more species | Keep players returning |
+
+**Proposed**
+- **Rojo** for code: Luau source lives in this GitHub repo and syncs into Roblox Studio on the developer's computer
+- Development (Roblox Studio, Blender MCP, Rojo) happens on the developer's own computer
+
+**Open**
+- Developer's OS (Windows or Mac) and whether Roblox Studio is installed
