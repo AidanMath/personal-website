@@ -18,13 +18,10 @@ World.DockEnd = Vector3.new(122, 0, 0) -- lake end
 local WOOD = Color3.fromRGB(150, 105, 70)
 local DARK_WOOD = Color3.fromRGB(105, 72, 48)
 
+local Assets = require(ReplicatedStorage:WaitForChild("Shared").Assets)
+
 local function asset(name: string): Model?
-	local folder = ReplicatedStorage:FindFirstChild("Assets")
-	local m = folder and folder:FindFirstChild(name)
-	if m and m:IsA("Model") then
-		return m:Clone()
-	end
-	return nil
+	return Assets.get(name, nil, true)
 end
 
 local function part(props: { [string]: any }, parent: Instance): Part
@@ -66,16 +63,28 @@ local function buildTerrain()
 end
 
 local function buildDock(parent: Instance)
-	local m = asset("Dock")
-	if m then
-		m:PivotTo(CFrame.lookAt(World.DockStart, World.DockEnd))
-		m.Parent = parent
-		return
-	end
 	local dock = Instance.new("Model")
 	dock.Name = "Dock"
 	local len = (World.DockStart - World.DockEnd).Magnitude
 	local mid = (World.DockStart + World.DockEnd) / 2
+	local dir = (World.DockEnd - World.DockStart).Unit
+
+	-- Modular dock: tile the imported 8x8 section along the dock
+	local probe = asset("DockSection")
+	if probe then
+		probe:PivotTo(CFrame.new())
+		local _, size = probe:GetBoundingBox()
+		probe:Destroy()
+		local sectionLen = math.max(size.Z, 1)
+		for i = 0, math.ceil(len / sectionLen) - 1 do
+			local m = asset("DockSection") :: Model
+			local at = World.DockStart + dir * (sectionLen * (i + 0.5))
+			Assets.placeTop(m, CFrame.lookAt(at, at + dir), 1.5)
+			m.Parent = dock
+		end
+		dock.Parent = parent
+		return
+	end
 	-- planks with small gaps
 	local plankCount = math.floor(len / 2)
 	for i = 0, plankCount - 1 do
@@ -104,10 +113,11 @@ local function buildDock(parent: Instance)
 end
 
 local function buildCabin(parent: Instance)
-	local origin = CFrame.new(205, 0, 26) * CFrame.Angles(0, math.rad(-90), 0)
+	-- front (local -Z) faces the lake (-X)
+	local origin = CFrame.new(205, 0, 26) * CFrame.Angles(0, math.rad(90), 0)
 	local m = asset("Cabin")
 	if m then
-		m:PivotTo(origin)
+		Assets.placeBottom(m, origin, 0)
 		m.Parent = parent
 		return
 	end
@@ -186,9 +196,16 @@ local function buildTrees(parent: Instance)
 		local r = rng:NextNumber(World.LakeRadius + 25, 330)
 		local pos = Vector3.new(math.cos(angle) * r, 0, math.sin(angle) * r)
 		if (pos - Vector3.new(190, 0, 0)).Magnitude > 45 then -- keep the dock/cabin clearing open
-			local m = asset("Tree")
+			local kinds = {}
+			for _, k in { "Tree", "TreeRound" } do
+				if Assets.has(k) then
+					table.insert(kinds, k)
+				end
+			end
+			local m = if #kinds > 0 then asset(kinds[rng:NextInteger(1, #kinds)]) else nil
 			if m then
-				m:PivotTo(CFrame.new(pos) * CFrame.Angles(0, rng:NextNumber(0, 6.28), 0))
+				m:ScaleTo(rng:NextNumber(0.8, 1.5))
+				Assets.placeBottom(m, CFrame.new(pos) * CFrame.Angles(0, rng:NextNumber(0, 6.28), 0), -0.5)
 				m.Parent = folder
 			else
 				local h = rng:NextNumber(14, 26)

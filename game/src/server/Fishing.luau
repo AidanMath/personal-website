@@ -198,6 +198,7 @@ local function onFightResult(player: Player, outcome: any): any
 		return {
 			result = "landed",
 			fish = {
+				id = s.fish.id,
 				name = s.fish.name,
 				weight = s.weight,
 				value = Catch.value(s.fish, s.weight),

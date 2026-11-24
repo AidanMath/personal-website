@@ -8,6 +8,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
 local World = require(script.Parent.World)
+local Assets = require(ReplicatedStorage:WaitForChild("Shared").Assets)
 
 local Boat = {}
 
@@ -53,11 +54,31 @@ local function fallbackModel(): Model
 end
 
 local function build(owner: Player, slot: number): Model
-	local template = ReplicatedStorage:FindFirstChild("Assets") and (ReplicatedStorage :: any).Assets:FindFirstChild("Rowboat")
-	local m: Model = if template and template:IsA("Model") then template:Clone() else fallbackModel()
+	local imported = Assets.get("Rowboat", nil, false)
+	local m: Model = imported or fallbackModel()
 	m.Name = owner.Name .. "_Rowboat"
-	local hull = (m:FindFirstChild("Hull") or m.PrimaryPart) :: BasePart
-	assert(hull, "Rowboat model needs a part named Hull")
+	local hull: BasePart
+	if imported then
+		-- Imported meshes are visual only (hollow hulls make poor physics shapes).
+		-- An invisible float box carries buoyancy, collisions and the drive constraints.
+		m:PivotTo(CFrame.new())
+		local box, size = m:GetBoundingBox()
+		local float = Instance.new("Part")
+		float.Name = "Float"
+		float.Size = Vector3.new(size.X * 0.85, 1, size.Z * 0.85)
+		float.CFrame = CFrame.new(box.Position.X, box.Position.Y - size.Y / 2 + 0.5, box.Position.Z)
+		float.Transparency = 1
+		float.Parent = m
+		for _, d in m:GetDescendants() do
+			if d:IsA("BasePart") and d ~= float then
+				d.Massless = true
+				d.CanCollide = false
+			end
+		end
+		hull = float
+	else
+		hull = m:FindFirstChild("Hull") :: BasePart
+	end
 	m.PrimaryPart = hull
 
 	for _, d in m:GetDescendants() do

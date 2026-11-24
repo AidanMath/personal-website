@@ -1,21 +1,32 @@
 # TODO / checkpoint
 
-Branch: `milestone-1-lake-test` (local only, not pushed). Design log `docs/design-decisions.md` is untouched — ask Aidan before editing.
+Branch: `milestone-1-lake-test` (pushed to GitHub). Design log `docs/design-decisions.md` untouched; ask Aidan before editing it.
 
-## Milestone 0 — Setup
+## Aidan's decisions (2026-11-24)
+- Install Studio: yes. Models: more complex Blender models (not blocks). Placeholder lake fish: OK. Phone controls: yes.
+- Publishing/title: skip for now. Git: commit and push.
+
+## Milestone 0: Setup
 - [x] OS: Windows 11 Home x64
-- [ ] Roblox Studio — NOT installed (no official winget pkg). Aidan: install from create.roblox.com, log in, then `rojo plugin install`
-- [x] Rojo 7.6.1 + project in `game/` (build/sourcemap/serve verified)
-- [x] Blender 5.3.0 at `%LOCALAPPDATA%\Programs\Blender\Blender Foundation\Blender 5.3\` (MSI hash + signature verified, extracted without admin)
-- [x] MCP for Blender add-on installed + enabled; server listened on :9876 when Blender opened
+- [x] Roblox Studio 0.748 installed (official installer, signature verified)
+- [ ] **Aidan:** sign in to Studio. The saved session expired (401), so it's on the login screen.
+- [ ] **Aidan:** run `rojo plugin install`, then `cd game; rojo serve`, then Studio → Plugins → Rojo → Connect
+- [x] Rojo 7.6.1 and the project in `game/`
+- [x] Blender 5.3.0 at `%LOCALAPPDATA%\Programs\Blender\...` and the MCP for Blender add-on (enabled; server on :9876)
+  - MCP tool calls show permission prompts. When unattended, use headless `blender -b --python` instead.
 - [ ] Figma style guide (not started)
-- Tooling: Luau 0.748 + luau-lsp 1.70.1 + Roblox defs in `~/.local/luau-tools`
+- Tooling: Luau 0.748, luau-lsp 1.70.1 and Roblox defs in `~/.local/luau-tools`
 
-## Milestone 1 — Lake test (building autonomously; defaults below are assumptions)
-Assumed defaults (Aidan may override): Studio-primitive rough art, placeholder fish (perch, bass, trout, pike, catfish), basic phone controls, no saving.
-- [x] Pure shared modules: Rng, Fight, Bite, Catch, Config (Fish, Gear)
-- [x] Unit tests pass (`luau game/tests/run.luau`; bot fights 14-39s, upgrade ~11.7 min) — fight durations 10s–2min, idle loses, weakest-link snaps
-- [ ] Server: world greybox, rod tool, remotes, cast/hook/fight/land/sell/buy, rowboat
-- [ ] Client: cast charge, bobber + nibbles, fight UI, keep/release, shop, boat driving
-- [ ] luau-lsp type check clean
-- [ ] Studio playtest (needs Studio — Aidan)
+## Milestone 1: Lake test
+- [x] Pure shared modules and unit tests (`luau game/tests/run.luau`)
+- [x] Server: terrain lake (shallow ring plus a 30-stud deep hole), dock, cabin, shop, buyer, rowboats, fishing remotes
+- [x] Client: charge cast, nibbles/take, fight UI, keep/release card with 3D fish, shop, boat driving, touch buttons, F3 debug
+- [x] luau-lsp type check clean; `rojo build` OK
+- [x] Blender models: Rowboat, DockSection, Cabin, Tree, TreeRound, 5 fish → `game/assets/*.fbx` with palette-driven colors
+- [ ] **Aidan:** import the FBX files into ReplicatedStorage/Assets (see `game/assets/README.md`)
+- [ ] First Studio playtest. Likely tweaks: rod grip angle, boat float height and speed, fight feel and numbers.
+- [ ] Friends playtest. Needs publishing (skipped for now).
+
+## Ideas, not done
+- Trophy pose (avatar holds up big catches) is in the art direction but isn't built yet.
+- Real sounds: placeholders use the built-in `rbxasset://sounds/impact_water.mp3`.

@@ -8,6 +8,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
 local Fight = require(ReplicatedStorage:WaitForChild("Shared").Fishing.Fight)
+local Assets = require(ReplicatedStorage:WaitForChild("Shared").Assets)
 
 local UI = {}
 
@@ -155,7 +156,7 @@ function UI.init()
 	fishArrow = label({ Position = UDim2.new(0, 20, 0, 88), Size = UDim2.new(1, -40, 0, 24), Text = "", TextColor3 = BRASS }, fightFrame)
 
 	-- Catch card (centre)
-	catchCard = frame({ AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.45), Size = UDim2.fromOffset(340, 210), Visible = false }, gui)
+	catchCard = frame({ AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.45), Size = UDim2.fromOffset(340, 320), Visible = false }, gui)
 	corner(catchCard, 16)
 	stroke(catchCard, BRASS, 3)
 
@@ -262,7 +263,7 @@ function UI.showFight(v: FightView?)
 	fightFrame.BackgroundColor3 = if v.strain > 0.6 then Color3.fromRGB(70, 30, 30) else NAVY
 end
 
-export type CatchInfo = { name: string, weight: number, value: number, isNew: boolean }
+export type CatchInfo = { id: string, name: string, weight: number, value: number, isNew: boolean }
 
 function UI.showCatch(info: CatchInfo?, onDecide: ((keep: boolean) -> ())?)
 	for _, c in catchCard:GetChildren() do
@@ -277,8 +278,29 @@ function UI.showCatch(info: CatchInfo?, onDecide: ((keep: boolean) -> ())?)
 	if info.isNew then
 		label({ Size = UDim2.new(1, 0, 0, 24), Position = UDim2.fromOffset(0, 10), Text = "NEW SPECIES!", TextColor3 = BRASS }, catchCard)
 	end
-	label({ Size = UDim2.new(1, -20, 0, 40), Position = UDim2.fromOffset(10, 38), Text = info.name }, catchCard)
-	label({ Size = UDim2.new(1, -20, 0, 28), Position = UDim2.fromOffset(10, 84), Font = FONT_BODY, Text = `{info.weight} lb  ·  worth ${info.value}` }, catchCard)
+	-- 3D view of the fish (if its model has been imported)
+	local fishModel = Assets.get(info.id, "Fish", true)
+	if fishModel then
+		local vp = Instance.new("ViewportFrame")
+		vp.BackgroundTransparency = 1
+		vp.Position = UDim2.fromOffset(10, 34)
+		vp.Size = UDim2.new(1, -20, 0, 120)
+		vp.Ambient = Color3.fromRGB(170, 160, 150)
+		vp.LightColor = Color3.fromRGB(255, 240, 220)
+		vp.LightDirection = Vector3.new(-0.4, -1, -0.6)
+		vp.Parent = catchCard
+		fishModel:PivotTo(CFrame.new())
+		local box, size = fishModel:GetBoundingBox()
+		fishModel.Parent = vp
+		local cam = Instance.new("Camera")
+		cam.FieldOfView = 30
+		local dist = math.max(size.Z, size.Y * 2) * 2.1
+		cam.CFrame = CFrame.lookAt(box.Position + Vector3.new(dist, dist * 0.15, 0), box.Position)
+		cam.Parent = vp
+		vp.CurrentCamera = cam
+	end
+	label({ Size = UDim2.new(1, -20, 0, 40), Position = UDim2.fromOffset(10, 156), Text = info.name }, catchCard)
+	label({ Size = UDim2.new(1, -20, 0, 28), Position = UDim2.fromOffset(10, 200), Font = FONT_BODY, Text = `{info.weight} lb  ·  worth ${info.value}` }, catchCard)
 	local keep = button("Keep", Color3.fromRGB(40, 100, 70), catchCard)
 	keep.Position = UDim2.new(0, 20, 1, -64)
 	keep.Size = UDim2.new(0.5, -30, 0, 46)
