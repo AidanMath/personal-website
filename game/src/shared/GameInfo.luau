@@ -3,7 +3,7 @@
 
 local GameInfo = {
 	Name = "Untitled Fishing Game",
-	Milestone = 0,
+	Milestone = 1,
 }
 
 return GameInfo

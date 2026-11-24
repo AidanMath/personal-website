@@ -12,18 +12,18 @@ export type FishDef = {
 	minWeight: number,
 	maxWeight: number,
 	spawnWeight: number, -- relative chance
-	minCast: number, -- 0..1 fraction of max cast distance needed (far = deeper water)
+	minDepth: number, -- 0..1 fraction of the lake's max depth needed
 	power: number,
 	staminaSeconds: number,
 	nibbleMin: number,
 	nibbleMax: number,
 }
 
--- Picks a species among those reachable at this cast distance (0..1 of the rod's max).
-function Catch.pickFish(rng: () -> number, fish: { FishDef }, castFraction: number): FishDef?
+-- Picks a species among those living at this water depth (0..1 of the lake's max depth).
+function Catch.pickFish(rng: () -> number, fish: { FishDef }, depthFraction: number): FishDef?
 	local total = 0
 	for _, f in fish do
-		if castFraction >= f.minCast then
+		if depthFraction >= f.minDepth then
 			total += f.spawnWeight
 		end
 	end
@@ -32,7 +32,7 @@ function Catch.pickFish(rng: () -> number, fish: { FishDef }, castFraction: numb
 	end
 	local roll = rng() * total
 	for _, f in fish do
-		if castFraction >= f.minCast then
+		if depthFraction >= f.minDepth then
 			roll -= f.spawnWeight
 			if roll <= 0 then
 				return f

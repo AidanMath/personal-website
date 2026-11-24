@@ -156,7 +156,7 @@ do
 	local rng = Rng.new(9)
 	for _ = 1, 200 do
 		local f = Catch.pickFish(rng, FishList, 0.1)
-		check(f ~= nil and f.minCast <= 0.1, "short casts only catch near-shore fish")
+		check(f ~= nil and f.minDepth <= 0.1, "shallow water only has shallow fish")
 	end
 	local sawCatfish = false
 	for _ = 1, 500 do
@@ -165,7 +165,7 @@ do
 			sawCatfish = true
 		end
 	end
-	check(sawCatfish, "long casts can find catfish")
+	check(sawCatfish, "deep water can have catfish")
 	for _ = 1, 200 do
 		local w, n = Catch.rollWeight(rng, catfish)
 		check(w >= catfish.minWeight and w <= catfish.maxWeight and n >= 0 and n <= 1, "weight in range")
